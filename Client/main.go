@@ -2,8 +2,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,19 +12,23 @@ import (
 func main() {
 	fmt.Println("Чат открыт, можно писать...")
 
-	userMessage := ConsoleReadLn()
+	for {
+		userMessage := ConsoleReadLn()
 
-	jsonData, _ := json.Marshal(map[string]string{
-		"name":    "Toby",
-		"message": userMessage,
-	})
+		switch userMessage {
+		case "users":
+			GetAllUsers()
+		}
+	}
+}
 
-	httpURL := "http://localhost:8181/"
+func GetAllUsers() {
+	httpURL := "http://localhost:8181/get/user/all"
 	httpMethod := "POST"
 	client := &http.Client{}
 
 	req, _ := http.NewRequest(
-		httpMethod, httpURL, bytes.NewBuffer(jsonData),
+		httpMethod, httpURL, nil,
 	)
 
 	req.Header.Set("Content-Type", "application/json")
