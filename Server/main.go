@@ -1,21 +1,21 @@
 package main
 
 import (
-	"bufio"
-	"os"
-	"strings"
+	"fmt"
+	"net/http"
 )
 
 func main() {
+	http.HandleFunc("/about", func(response http.ResponseWriter, request *http.Request) {
+		fmt.Fprint(response, "About Page")
+	})
+	http.HandleFunc("/contact", func(response http.ResponseWriter, request *http.Request) {
+		fmt.Fprint(response, "Contact Page")
+	})
+	http.HandleFunc("/", func(response http.ResponseWriter, request *http.Request) {
+		fmt.Fprint(response, "Index Page")
+	})
 
-}
-
-func ConsoleReadLn() string {
-	consoleReader := bufio.NewReader(os.Stdin)
-	message, _ := consoleReader.ReadString('\n')
-
-	message = strings.TrimSuffix(message, "\r")
-	message = strings.TrimSuffix(message, "\n")
-
-	return message
+	fmt.Println("Server is listening...")
+	http.ListenAndServe("localhost:8181", nil)
 }
